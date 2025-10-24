@@ -4,12 +4,15 @@ cache	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/
 cache_header_t	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^} cache_header_t;$/;"	t	language:C++	typeref:struct:__anon2	file:
 cache_t	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^typedef set_t *cache_t;$/;"	t	language:C++	file:
 charidx	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^int charidx(char c) $/;"	f	language:C++
+decrypt	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^void decrypt(node_t *english, char *cyphertext)$/;"	f	language:C++
 dict_node	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^struct dict_node {$/;"	s	language:C++	file:
 dirty_bit	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^    char dirty_bit;$/;"	m	language:C++	struct:__anon1	file:
 E	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^    unsigned long E;$/;"	m	language:C++	struct:__anon2	file:
+encrypt	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^void encrypt(char *message, int shift)$/;"	f	language:C++
 error	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^void error(int type)$/;"	f	language:C++
 execute	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^void execute(unsigned long tag, unsigned long set_index, char operation,$/;"	f	language:C++
 execute_per_line	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^int execute_per_line(const char *trace, unsigned long s, unsigned long E,$/;"	f	language:C++
+find_word	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^bool find_word(node_t *root, char *word)$/;"	f	language:C++
 free_dict	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^void free_dict(node_t *dict)$/;"	f	language:C++
 get_eng_dict	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^node_t *get_eng_dict()$/;"	f	language:C++
 handle_error	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^void handle_error(unsigned long s, unsigned long b, unsigned long E,$/;"	f	language:C++
@@ -26,6 +29,7 @@ MAXWORDLEN	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/mai
 next_list	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^    struct dict_node *next_list[26];$/;"	m	language:C++	struct:dict_node	typeref:struct:dict_node::dict_node	file:
 node_t	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^typedef struct dict_node node_t;$/;"	t	language:C++	typeref:struct:dict_node	file:
 print_dict	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^void print_dict(node_t *root, char *accword, int len)$/;"	f	language:C++
+rotate	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/main.c	/^char rotate(char c, int k)$/;"	f	language:C++
 set_t	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^typedef line_t *set_t;$/;"	t	language:C++	file:
 tag	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^    unsigned long tag;$/;"	m	language:C++	struct:__anon1	file:
 usage	/Users/hyunwooyi/Documents/Projects/CaesarCipher/statisticalShift/csim.c	/^void usage(int a) {$/;"	f	language:C++

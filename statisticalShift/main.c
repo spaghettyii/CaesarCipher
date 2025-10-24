@@ -100,6 +100,25 @@ void print_dict(node_t *root, char *accword, int len)
     return;
 }
 
+bool find_word(node_t *root, char *word)
+//@requires root != NULL
+//@requires word != NULL
+//@ensures true if word is found from the root of the tree
+{
+    if (word == NULL || root == NULL) return false;
+    char next_char = word[0];
+    int iter = 0;
+    node_t *wordp = root;
+    while (next_char != '\0' && next_char != '\n')
+    {
+        int idx = charidx(next_char);
+        if (wordp->next_list[idx] == NULL) return false;
+        wordp = wordp->next_list[idx];
+        next_char = word[++iter];
+    }
+    return wordp->valid_word;
+}
+
 node_t *get_eng_dict()
 {
     node_t *english_dict = initialize();
@@ -108,12 +127,43 @@ node_t *get_eng_dict()
 
     char temp[MAXWORDLEN];
     while (fgets(temp, MAXWORDLEN, fptr))
-    {
         insert_word(english_dict, temp);
-        //printf("%s", temp);
-    }
 
     return english_dict;
+}
+
+char rotate(char c, int k)
+{
+    return ('a' <= c && c <= 'z') ? ((c - 'a' + k) % 26) + 'a' : ((c - 'A' + k) % 26) + 'a'; 
+}
+
+void decrypt(node_t *english, char *cyphertext)
+{
+    int len = strlen(cyphertext) - 1;
+    for (int i = 0; i < 26; i++)
+    {
+        for (int j = 0; j < len; j++) {
+            char c = cyphertext[j];
+            if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z'))
+                cyphertext[j] = rotate(c, 1);
+        }
+        char temp[len+1];
+        strncpy(temp, cyphertext, len + 1);
+        if (find_word(english, strtok(temp, " \n\0")))
+            printf("%s", cyphertext);
+    }
+    return;
+}
+
+void encrypt(char *message, int shift)
+{
+    int len = strlen(message) - 1;
+    for (int i = 0; i < len; i++) {
+        char c = message[i];
+        if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z'))
+            message[i] = rotate(message[i], shift);
+    }
+    return;
 }
 
 int main (int argc, char *argv[])
@@ -125,11 +175,13 @@ int main (int argc, char *argv[])
     char s[MAXSTRINGLEN] = "";
     printf("what is the cipher text you want decrypted?\n");
     fgets(s, MAXSTRINGLEN, stdin);
-    printf("your deciphered text is:\n");
 
     node_t *english = get_eng_dict();
-    char tempbuffer[100];
-    print_dict(english, &tempbuffer, 0);
+    // char tempbuffer[100];
+    // print_dict(english, &tempbuffer, 0);
+
+    printf("possible decryptions:\n");
+    decrypt(english, s);
 
     return 0;
 }
