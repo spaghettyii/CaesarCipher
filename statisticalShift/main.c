@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define MAXSTRINGLEN 10000
 
 typedef struct dict_node node_t;
 struct dict_node {
+    struct dict_node *next_list[26];
     char val;
-    struct dict_node *next[26];
+    bool valid_word;
 };
-
-typedef node_t *dict_header_t;
 
 void error(int type)
 {
@@ -26,19 +26,22 @@ void error(int type)
     exit(-3);
 }
 
-dict_header_t *initialize()
+node_t *initialize()
 {
-    dict_header_t *new_dict = malloc(sizeof(dict_header_t));
+    node_t *new_dict = malloc(sizeof(node_t));
     if (new_dict == NULL) error(1);
+    new_dict->val = '\0';
+    new_dict->valid_word = false;
     for (int i = 0; i < 26; i++)
-        new_dict[i] = NULL;
+        new_dict->next_list[i] = NULL;
     return new_dict;
 }
 
-void free_dict(dict_header_t *dict)
+void free_dict(node_t *dict)
 {
     for (int i = 0; i < 26; i++)
-        free(dict[i]);
+        free(dict->next_list[i]);
+    free(dict);
     return;
 }
 
@@ -48,34 +51,46 @@ int charidx(char c)
     return (65 <= c && c <= 90) ? (int)c - 65 : (int)c - 97;
 }
 
-void insert_word(dict_header_t *dict, char *word)
+void insert_word(node_t *wordp, char *word)
 //@requires word != NULL;
 {
     if (word == NULL) error(2);
-    int idx = charidx(first_char);
-    while (word[0] != '\0')
+    char next_char = word[0];
+    int idx = charidx(next_char);
+    while (next_char != '\0')
     {
-        if (dict[idx] == NULL) {
-            dict[idx] = malloc(sizeof(node_t));
+        if (wordp->next_list[idx] == NULL) {
+            wordp->next_list[idx] = malloc(sizeof(node_t));
+            wordp->next_list[idx]->val = next_char;
+            wordp->next_list[idx]->valid_word = false;
         }
-        dict[idx]->val = word[0];
-        dict = dict[idx]->next;
+        wordp = wordp->next_list[idx];
+        word = word + 1;
+        next_char = word[0];
+        idx = charidx(next_char);
     }
+    wordp->valid_word = true;
+    return;
 }
 
-void insert_word(dict_header_t *dict, char *word)
-//@requires word != NULL;
+void print_dict(node_t *root, char *accword, int len)
+//@requires accword to be the start of a buffer in which
+// the traversal will collect the words.
+// prints the current dictionary in inorder traversal order
 {
-    if (word == NULL || dict == NULL) error(2);
-    char first_char = word[0];
-    if (first_char == '\0') return;
-    
-    int idx = charidx(first_char);
-    if (dict[idx] == NULL) dict[idx] = malloc(sizeof(node_t));
-    dict[idx]->val = first_char;
-    dict = dict[idx]->next;
-    word = word + 1; 
-    insert_word(dict, word);
+    if (root == NULL) {
+        printf("tried to print null");
+        return;
+    }
+
+    accword[len] = root->val;
+    if (root->valid_word) {
+        for (int i = 0; i < len; i++)
+            printf("%c", accword[i]);
+        printf("\n");
+    }
+    for (int i = 0; i < 26; i++)
+        print_dict(root->next_list[i], accword, ++len);
     return;
 }
 
