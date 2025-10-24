@@ -79,23 +79,24 @@ void print_dict(node_t *root, char *accword, int len)
 // prints the current dictionary in inorder traversal order
 {
     if (root == NULL) {
-        printf("tried to print null");
         return;
     }
 
     accword[len] = root->val;
     if (root->valid_word) {
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i <= len; i++)
             printf("%c", accword[i]);
         printf("\n");
     }
+    len++;
     for (int i = 0; i < 26; i++)
-        print_dict(root->next_list[i], accword, ++len);
+        print_dict(root->next_list[i], accword, len);
     return;
 }
 
 int main (int argc, char *argv[])
 {
+    /*
     // By most frequent
     char freq[26] = "etaoinshrdlcumwfgypbvkjxqz";
     short counts[26] = {0};
@@ -104,17 +105,15 @@ int main (int argc, char *argv[])
     printf("what is the cipher text you want decrypted?\n");
     fgets(s, MAXSTRINGLEN, stdin);
     printf("your deciphered text is:\n");
-
-    long length = strlen(s);
-    for (int i = 0; i < length; i++)
-    {
-        char c = s[i];
-        if (65 <= c && c <= 90)
-           counts[c-65]++; 
-        else if (97 <= c && c <= 122) 
-            counts[c-97]++;
-    }
+    */
     
+    node_t *root = initialize();
+    insert_word(root, "bop");
+    insert_word(root, "tree");
+    insert_word(root, "ball");
+
+    char tempbuffer[100];
+    print_dict(root, &tempbuffer, 0);
 
     return 0;
 }
