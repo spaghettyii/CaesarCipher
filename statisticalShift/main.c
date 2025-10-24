@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #define MAXSTRINGLEN 10000
+#define MAXWORDLEN 100
 
 typedef struct dict_node node_t;
 struct dict_node {
@@ -14,16 +15,21 @@ struct dict_node {
 
 void error(int type)
 {
-    if (type == 1) {
-        printf("malloc error\n");
-        exit(-1);
+    switch (type) {
+        case 1:
+            printf("malloc error\n");
+            break;
+        case 2:
+            printf("NULL passed to function error\n");
+            break;
+        case 3:
+            printf("file open error\n");
+            break;
+        default:
+            printf("default error");
     }
-    if (type == 2) {
-        printf("NULL passed to function error\n");
-        exit(-2);
-    }
-    printf("default error");
-    exit(-3);
+    exit(-type);
+    return;
 }
 
 node_t *initialize()
@@ -56,8 +62,9 @@ void insert_word(node_t *wordp, char *word)
 {
     if (word == NULL) error(2);
     char next_char = word[0];
+    int iter = 0;
     int idx = charidx(next_char);
-    while (next_char != '\0')
+    while (next_char != '\0' && next_char != '\n')
     {
         if (wordp->next_list[idx] == NULL) {
             wordp->next_list[idx] = malloc(sizeof(node_t));
@@ -65,8 +72,7 @@ void insert_word(node_t *wordp, char *word)
             wordp->next_list[idx]->valid_word = false;
         }
         wordp = wordp->next_list[idx];
-        word = word + 1;
-        next_char = word[0];
+        next_char = word[++iter];
         idx = charidx(next_char);
     }
     wordp->valid_word = true;
@@ -84,7 +90,7 @@ void print_dict(node_t *root, char *accword, int len)
 
     accword[len] = root->val;
     if (root->valid_word) {
-        for (int i = 0; i <= len; i++)
+        for (int i = 1; i <= len; i++)
             printf("%c", accword[i]);
         printf("\n");
     }
@@ -94,9 +100,24 @@ void print_dict(node_t *root, char *accword, int len)
     return;
 }
 
+node_t *get_eng_dict()
+{
+    node_t *english_dict = initialize();
+    FILE *fptr = fopen("/usr/share/dict/words", "r");
+    if (fptr == NULL) error(3);
+
+    char temp[MAXWORDLEN];
+    while (fgets(temp, MAXWORDLEN, fptr))
+    {
+        insert_word(english_dict, temp);
+        //printf("%s", temp);
+    }
+
+    return english_dict;
+}
+
 int main (int argc, char *argv[])
 {
-    /*
     // By most frequent
     char freq[26] = "etaoinshrdlcumwfgypbvkjxqz";
     short counts[26] = {0};
@@ -105,15 +126,10 @@ int main (int argc, char *argv[])
     printf("what is the cipher text you want decrypted?\n");
     fgets(s, MAXSTRINGLEN, stdin);
     printf("your deciphered text is:\n");
-    */
-    
-    node_t *root = initialize();
-    insert_word(root, "bop");
-    insert_word(root, "tree");
-    insert_word(root, "ball");
 
+    node_t *english = get_eng_dict();
     char tempbuffer[100];
-    print_dict(root, &tempbuffer, 0);
+    print_dict(english, &tempbuffer, 0);
 
     return 0;
 }
